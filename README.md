@@ -13,6 +13,10 @@ Experimental helper for [libGDX](https://libgdx.com/) to build [GraalVM](https:/
 |    FreeType Extension     |1.10.0 |      Complete       |
 |   Controllers Extension   |2.2.1  |      Complete       |
 
+## Annotations
+There are two annotations, "CollectForReflection" and "CollectForSerialization". They currently only work on classes.
+PR's are welcome to extend this functionality!
+
 ## Examples
 https://github.com/anyicomplex/gdx-native-image-example  
 https://github.com/anyicomplex/unlucky-ae
@@ -29,7 +33,7 @@ allprojects {
 }
 ```
 
-Step 2. Add the dependency
+Step 2. Add the dependency based on what you mean. They will register themselves automatically if they are on the classpath.
 ```groovy
 dependencies {
     implementation 'io.github.anyicomplex:gdx-svmhelper:1.10.0-beta4'
