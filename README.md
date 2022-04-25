@@ -36,13 +36,13 @@ allprojects {
 Step 2. Add the dependency based on what you mean. They will register themselves automatically if they are on the classpath.
 ```groovy
 dependencies {
-    implementation 'io.github.anyicomplex:gdx-svmhelper:1.10.0-beta4'
-    implementation 'io.github.anyicomplex:gdx-svmhelper-backend-lwjgl3:1.10.0-beta4'     // LWJGL3
-    implementation 'io.github.anyicomplex:gdx-svmhelper-backend-moe:1.10.0-beta4'        // MOE
-    implementation 'io.github.anyicomplex:gdx-svmhelper-extension-box2d:1.10.0-beta4'    // Box2D
-    implementation 'io.github.anyicomplex:gdx-svmhelper-extension-bullet:1.10.0-beta4'   // Bullet
-    implementation 'io.github.anyicomplex:gdx-svmhelper-extension-freetype:1.10.0-beta4' // FreeType
-    implementation 'io.github.anyicomplex:gdx-svmhelper-extension-controllers-lwjgl3:2.2.1-beta4' // Controllers
+    implementation 'io.github.berstanio:gdx-svmhelper:1.10.0-SNAPSHOT'
+    implementation 'io.github.berstanio:gdx-svmhelper-backend-lwjgl3:1.10.0-SNAPSHOT'     // LWJGL3
+    implementation 'io.github.berstanio:gdx-svmhelper-backend-moe:1.10.0-SNAPSHOT'        // MOE
+    implementation 'io.github.berstanio:gdx-svmhelper-extension-box2d:1.10.0-SNAPSHOT'    // Box2D
+    implementation 'io.github.berstanio:gdx-svmhelper-extension-bullet:1.10.0-SNAPSHOT'   // Bullet
+    implementation 'io.github.berstanio:gdx-svmhelper-extension-freetype:1.10.0-SNAPSHOT' // FreeType
+    implementation 'io.github.berstanio:gdx-svmhelper-extension-controllers-lwjgl3:2.2.1-SNAPSHOT' // Controllers
 }
 ```
 ### 2. Set the shared library path (LWJGL3 backend only)
