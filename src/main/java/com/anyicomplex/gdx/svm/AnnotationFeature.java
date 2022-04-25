@@ -35,7 +35,7 @@ public class AnnotationFeature implements Feature {
 			System.out.print("The following classes are added because of the CollectForSerialization annotation: ");
 			System.out.println(String.join(", ", collectedForSerialization));
 		} catch (NoSuchFieldException | IllegalAccessException e) {
-			e.printStackTrace();
+			System.err.println("You are probably using Java 17 GraalVM. The annotation are not currently supported for that.");
 		}
 	}
 
