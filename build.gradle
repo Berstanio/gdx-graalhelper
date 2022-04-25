@@ -1,6 +1,6 @@
 allprojects {
     apply plugin: "java-library"
-    group 'io.github.anyicomplex'
+    group 'io.github.berstanio'
     sourceCompatibility = 1.8
     ext {
         gdxVersion = '1.10.0'
