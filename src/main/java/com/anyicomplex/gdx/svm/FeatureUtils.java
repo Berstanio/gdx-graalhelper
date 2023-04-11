@@ -17,17 +17,22 @@
 
 package com.anyicomplex.gdx.svm;
 
+import com.oracle.graal.pointsto.util.AnalysisError;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Simple utility class for {@link Feature}s.
  */
 public class FeatureUtils {
+
+    private static Set<Class<?>> registered = new HashSet<>();
 
     /**
      * <p>libGDX has quite heavy reflection usage, includes all collection classes.
@@ -50,20 +55,23 @@ public class FeatureUtils {
      * @param classes the classes will be registered
      */
     public static void registerForAnyInstantiation(boolean registerConstructorsParams, Class<?>... classes) {
-        RuntimeReflection.register(classes);
         for (Class<?> clazz : classes) {
-            RuntimeReflection.register(clazz.getDeclaredConstructors());
+            if (registered.contains(clazz)) continue;
+            registered.add(clazz);
+            RuntimeReflection.register(clazz);
+            RuntimeReflection.register(clazz.getConstructors());
             if (registerConstructorsParams) {
-                for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
+                for (Constructor<?> constructor : clazz.getConstructors()) {
                     for (Class<?> paramClazz : constructor.getParameterTypes()) {
                         registerForAnyInstantiation(true, paramClazz);
                     }
                 }
             }
-            RuntimeReflection.register(clazz.getDeclaredMethods());
-            for (Field field : clazz.getDeclaredFields()) {
+            RuntimeReflection.register(clazz.getMethods());
+            for (Field field : clazz.getFields()) {
                 registerForAnyInstantiation(registerConstructorsParams, field.getType());
             }
+            RuntimeReflection.register(clazz.getFields());
             RuntimeReflection.register(clazz.getDeclaredFields());
             registerForAnyInstantiation(registerConstructorsParams, clazz.getDeclaredClasses());
         }

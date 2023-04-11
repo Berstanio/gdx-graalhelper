@@ -22,6 +22,12 @@ import com.oracle.svm.core.annotate.RecomputeFieldValue;
 import com.oracle.svm.core.annotate.RecomputeFieldValue.Kind;
 import com.oracle.svm.core.annotate.Substitute;
 import com.oracle.svm.core.annotate.TargetClass;
+import org.graalvm.jniutils.HotSpotCalls;
+import org.graalvm.jniutils.JNI;
+import org.graalvm.jniutils.JNIMethodScope;
+import org.lwjgl.system.MemoryUtil;
+import org.lwjgl.system.Pointer;
+import org.lwjgl.system.ThreadLocalUtil;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -43,34 +49,42 @@ final class Target_org_lwjgl_system_ThreadLocalUtil {
   @RecomputeFieldValue(kind = Kind.FromAlias, isFinal = true)
   private static long FUNCTION_MISSING_ABORT;
 
+  @Alias
+  @RecomputeFieldValue(kind = Kind.FromAlias, isFinal = true)
+  private static int CAPABILITIES_OFFSET;
+
   @Substitute
-  public static void setFunctionMissingAddresses(Class<?> capabilitiesClass, int index) {
-    if (capabilitiesClass == null) {
-      long missingCaps = memGetAddress(JNI_NATIVE_INTERFACE + Integer.toUnsignedLong(index) * POINTER_SIZE);
+  public static void setFunctionMissingAddresses(int functionCount) {
+
+    long ptr = JNI_NATIVE_INTERFACE + CAPABILITIES_OFFSET;
+    if (functionCount == 0) {
+      long missingCaps = memGetAddress(ptr);
       if (missingCaps != NULL) {
         getAllocator().free(missingCaps);
-        memPutAddress(JNI_NATIVE_INTERFACE + Integer.toUnsignedLong(index) * POINTER_SIZE, NULL);
+        memPutAddress(ptr, NULL);
       }
     } else {
-      int functionCount = getFieldsFromCapabilities(capabilitiesClass).size();
-
       long missingCaps = getAllocator().malloc(Integer.toUnsignedLong(functionCount) * POINTER_SIZE);
       for (int i = 0; i < functionCount; i++) {
         memPutAddress(missingCaps + Integer.toUnsignedLong(i) * POINTER_SIZE, FUNCTION_MISSING_ABORT);
       }
 
       //the whole purpose of substituting this method is just to remove the following line
-      //(which causes the resulting native image to crash!)
-      //memPutAddress(JNI_NATIVE_INTERFACE + Integer.toUnsignedLong(index) * POINTER_SIZE, missingCaps);
+      //(which causes the generated native image to crash!)
+      //memPutAddress(ptr, missingCaps);
     }
   }
 
-  @Alias
-  private static List<Field> getFieldsFromCapabilities(Class<?> capabilitiesClass) {
-    return null;
-  }
 
+  @Substitute
+  public static void setCapabilities(long capabilities) {
+    // Get thread's JNIEnv
+    new RuntimeException("HI").printStackTrace();
+  }
 }
 
+
+
 /** Dummy class with the file's name. */
-public class Lwjgl3Substitutions {}
+public class Lwjgl3Substitutions {
+}

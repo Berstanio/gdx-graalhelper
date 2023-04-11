@@ -20,6 +20,7 @@ package com.anyicomplex.gdx.lwjgl3.svm;
 import com.anyicomplex.gdx.svm.FeatureUtils;
 import com.oracle.svm.core.annotate.AutomaticFeature;
 import org.graalvm.nativeimage.hosted.Feature;
+import org.graalvm.nativeimage.hosted.RuntimeClassInitialization;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
 @AutomaticFeature
@@ -70,6 +71,7 @@ public class ReflectionRegistrationFeature implements Feature {
         FeatureUtils.registerForGdxInstantiation(org.lwjgl.system.jni.JNINativeMethod.class);
 
         RuntimeReflection.register(sun.misc.Unsafe.class);
+        RuntimeReflection.register(sun.misc.Unsafe.class.getDeclaredMethods());
         RuntimeReflection.register(sun.misc.Unsafe.class.getDeclaredFields());
         try {
             RuntimeReflection.register(sun.misc.Unsafe.class.getDeclaredMethod("arrayIndexScale", Class.class));
@@ -80,6 +82,14 @@ public class ReflectionRegistrationFeature implements Feature {
         }
 
         RuntimeReflection.register(org.lwjgl.system.MemoryUtil.MemoryAllocator.class);
+        RuntimeReflection.register(access.findClassByName("java.nio.DirectByteBuffer").getDeclaredFields());
+        RuntimeReflection.register(access.findClassByName("java.nio.DirectShortBufferU").getDeclaredFields());
+        RuntimeReflection.register(access.findClassByName("java.nio.DirectCharBufferU").getDeclaredFields());
+        RuntimeReflection.register(access.findClassByName("java.nio.DirectIntBufferU").getDeclaredFields());
+        RuntimeReflection.register(access.findClassByName("java.nio.DirectLongBufferU").getDeclaredFields());
+        RuntimeReflection.register(access.findClassByName("java.nio.DirectFloatBufferU").getDeclaredFields());
+        RuntimeReflection.register(access.findClassByName("java.nio.DirectDoubleBufferU").getDeclaredFields());
+
         FeatureUtils.registerForGdxInstantiation(org.lwjgl.system.Struct.class);
         // Platform APIs
         if (isWindows) {

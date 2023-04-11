@@ -17,9 +17,18 @@
 
 package com.anyicomplex.gdx.svm;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.oracle.svm.core.annotate.AutomaticFeature;
+import com.oracle.svm.core.jdk.Target_java_nio_DirectByteBuffer;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @AutomaticFeature
 public class ReflectionRegistrationFeature implements Feature {
@@ -121,6 +130,7 @@ public class ReflectionRegistrationFeature implements Feature {
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.SplitPane.SplitPaneStyle.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Table.DebugRect.class);
+        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.TextTooltip.TextTooltipStyle.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle.class);
@@ -128,6 +138,7 @@ public class ReflectionRegistrationFeature implements Feature {
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.Drawable.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Skin.TintedDrawable.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable.class);
+
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable.class);
@@ -185,6 +196,8 @@ public class ReflectionRegistrationFeature implements Feature {
         RuntimeReflection.register(java.nio.FloatBuffer.class);
         RuntimeReflection.register(java.nio.DoubleBuffer.class);
         RuntimeReflection.register(java.nio.Buffer.class);
+        RuntimeReflection.register(java.nio.Buffer.class.getDeclaredFields());
+
 
         RuntimeReflection.register(com.badlogic.gdx.LifecycleListener.class);
 
