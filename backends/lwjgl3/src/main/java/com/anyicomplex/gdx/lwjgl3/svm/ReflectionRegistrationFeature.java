@@ -22,6 +22,7 @@ import com.oracle.svm.core.annotate.AutomaticFeature;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeClassInitialization;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
+import org.lwjgl.system.jemalloc.JEmallocAllocator;
 
 @AutomaticFeature
 public class ReflectionRegistrationFeature implements Feature {
