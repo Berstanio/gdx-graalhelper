@@ -18,19 +18,21 @@
 package com.anyicomplex.gdx.lwjgl3.svm;
 
 import com.oracle.svm.core.annotate.AutomaticFeature;
-import com.oracle.svm.core.jni.JNIRuntimeAccess;
 import org.graalvm.nativeimage.hosted.Feature;
+import org.graalvm.nativeimage.hosted.RuntimeJNIAccess;
+import org.graalvm.nativeimage.hosted.RuntimeResourceAccess;
+
+import java.lang.reflect.Method;
 
 @AutomaticFeature
 public class JNIRegistrationFeature implements Feature {
 
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
-
-        //LWJGL3
-        for (Class<?> aClass : org.lwjgl.system.CallbackI.class.getDeclaredClasses()) {
-            JNIRuntimeAccess.register(aClass.getDeclaredMethods());
-        }
+        // If not present the image segfaults, which induces mild headache. TODO: Open a graal issue about it
+        access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) -> {
+            RuntimeJNIAccess.register(aClass.getDeclaredMethods());
+        }, org.lwjgl.system.CallbackI.class);
     }
 
 }

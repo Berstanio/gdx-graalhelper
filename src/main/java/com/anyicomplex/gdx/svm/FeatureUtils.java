@@ -54,6 +54,7 @@ public class FeatureUtils {
      * @param registerConstructorsParams whether with all constructors' classes
      * @param classes the classes will be registered
      */
+    // TODO: 11.04.2023 This still holds the danger of just registering WAAAAY to much, this needs to be refined
     public static void registerForAnyInstantiation(boolean registerConstructorsParams, Class<?>... classes) {
         for (Class<?> clazz : classes) {
             if (registered.contains(clazz)) continue;

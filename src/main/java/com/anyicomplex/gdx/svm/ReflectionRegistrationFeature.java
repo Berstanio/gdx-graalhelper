@@ -17,18 +17,9 @@
 
 package com.anyicomplex.gdx.svm;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.oracle.svm.core.annotate.AutomaticFeature;
-import com.oracle.svm.core.jdk.Target_java_nio_DirectByteBuffer;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 @AutomaticFeature
 public class ReflectionRegistrationFeature implements Feature {
@@ -196,8 +187,6 @@ public class ReflectionRegistrationFeature implements Feature {
         RuntimeReflection.register(java.nio.FloatBuffer.class);
         RuntimeReflection.register(java.nio.DoubleBuffer.class);
         RuntimeReflection.register(java.nio.Buffer.class);
-        RuntimeReflection.register(java.nio.Buffer.class.getDeclaredFields());
-
 
         RuntimeReflection.register(com.badlogic.gdx.LifecycleListener.class);
 
