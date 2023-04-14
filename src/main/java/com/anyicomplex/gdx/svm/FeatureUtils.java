@@ -17,7 +17,6 @@
 
 package com.anyicomplex.gdx.svm;
 
-import com.oracle.graal.pointsto.util.AnalysisError;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
 

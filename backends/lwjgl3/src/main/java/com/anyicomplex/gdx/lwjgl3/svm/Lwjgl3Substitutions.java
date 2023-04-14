@@ -17,23 +17,8 @@
 
 package com.anyicomplex.gdx.lwjgl3.svm;
 
-import com.oracle.svm.core.annotate.Alias;
-import com.oracle.svm.core.annotate.RecomputeFieldValue;
-import com.oracle.svm.core.annotate.RecomputeFieldValue.Kind;
 import com.oracle.svm.core.annotate.Substitute;
 import com.oracle.svm.core.annotate.TargetClass;
-import org.graalvm.jniutils.HotSpotCalls;
-import org.graalvm.jniutils.JNI;
-import org.graalvm.jniutils.JNIMethodScope;
-import org.lwjgl.system.MemoryUtil;
-import org.lwjgl.system.Pointer;
-import org.lwjgl.system.ThreadLocalUtil;
-
-import java.lang.reflect.Field;
-import java.util.List;
-
-import static org.lwjgl.system.MemoryUtil.*;
-import static org.lwjgl.system.Pointer.POINTER_SIZE;
 
 @TargetClass(org.lwjgl.system.ThreadLocalUtil.class)
 final class Target_org_lwjgl_system_ThreadLocalUtil {
