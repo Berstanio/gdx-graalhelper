@@ -6,6 +6,7 @@ import org.graalvm.nativeimage.hosted.RuntimeSerialization;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Vector;
 
 @AutomaticFeature
@@ -16,11 +17,12 @@ public class AnnotationFeature implements Feature {
 		try {
 			Field f = ClassLoader.class.getDeclaredField("classes");
 			f.setAccessible(true);
-			ClassLoader classLoader = access.getApplicationClassLoader();
-			Vector<Class<?>> classes = (Vector<Class<?>>)f.get(classLoader);
+			ClassLoader classLoader = com.badlogic.gdx.files.FileHandle.class.getClassLoader();
+			Vector<Class<?>> vectorClasses = (Vector<Class<?>>)f.get(classLoader);
+			Class<?>[] classes = vectorClasses.toArray(new Class[0]);
 			ArrayList<String> collectedForReflection = new ArrayList<>();
 			ArrayList<String> collectedForSerialization = new ArrayList<>();
-			classes.forEach(aClass -> {
+			Arrays.stream(classes).forEach(aClass -> {
 				if (aClass.isAnnotationPresent(CollectForReflection.class)) {
 					FeatureUtils.registerForGdxInstantiation(aClass);
 					collectedForReflection.add(aClass.getName());
