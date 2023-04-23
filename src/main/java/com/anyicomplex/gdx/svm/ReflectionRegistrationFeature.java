@@ -130,6 +130,11 @@ public class ReflectionRegistrationFeature implements Feature {
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Skin.TintedDrawable.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable.class);
 
+        // TODO: 24.04.2023 Can be fine-tuned to maybe only contain the no-arg constructor
+        access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) ->
+                        RuntimeReflection.register(aClass.getDeclaredConstructors()),
+                com.badlogic.gdx.utils.Pool.Poolable.class);
+
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable.class);
