@@ -17,6 +17,7 @@
 
 package com.anyicomplex.gdx.svm;
 
+import com.badlogic.gdx.utils.Array;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
@@ -31,7 +32,7 @@ import java.util.Set;
  */
 public class FeatureUtils {
 
-    private static Set<Class<?>> registered = new HashSet<>();
+    private static final Set<Class<?>> registered = new HashSet<>();
 
     /**
      * <p>libGDX has quite heavy reflection usage, includes all collection classes.
@@ -45,7 +46,21 @@ public class FeatureUtils {
     }
 
     public static void registerForGdxJSONSerialization(Class<?>... classes) {
-        registerForAnyInstantiation(false, classes);
+        for (Class<?> clazz : classes) {
+            if (registered.contains(clazz)) continue;
+            registered.add(clazz);
+            RuntimeReflection.register(clazz);
+            registerOnlyNoArgConstructor(clazz);
+            for (Field field : clazz.getDeclaredFields()) {
+                registerForGdxJSONSerialization(field.getType());
+            }
+            for (Field field : clazz.getFields()) {
+                registerForGdxJSONSerialization(field.getType());
+            }
+            RuntimeReflection.register(clazz.getFields());
+            RuntimeReflection.register(clazz.getDeclaredFields());
+        }
+
     }
 
     public static void registerOnlyNoArgConstructor(Class<?>... classes) {
