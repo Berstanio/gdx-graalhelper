@@ -35,19 +35,18 @@ public class ReflectionRegistrationFeature implements Feature {
         boolean isMac = System.getProperty("os.name").contains("Mac");
 
         // LWJGL3 backend
-        RuntimeReflection.register(com.badlogic.gdx.backends.lwjgl3.audio.Ogg.Sound.class);
-        RuntimeReflection.register(com.badlogic.gdx.backends.lwjgl3.audio.Ogg.Music.class);
-        RuntimeReflection.register(com.badlogic.gdx.backends.lwjgl3.audio.Wav.Sound.class);
-        RuntimeReflection.register(com.badlogic.gdx.backends.lwjgl3.audio.Wav.Music.class);
-        RuntimeReflection.register(com.badlogic.gdx.backends.lwjgl3.audio.Mp3.Sound.class);
-        RuntimeReflection.register(com.badlogic.gdx.backends.lwjgl3.audio.Mp3.Music.class);
-        RuntimeReflection.register(com.badlogic.gdx.backends.lwjgl3.audio.Ogg.Sound.class.getConstructors());
-        RuntimeReflection.register(com.badlogic.gdx.backends.lwjgl3.audio.Ogg.Music.class.getConstructors());
-        RuntimeReflection.register(com.badlogic.gdx.backends.lwjgl3.audio.Wav.Sound.class.getConstructors());
-        RuntimeReflection.register(com.badlogic.gdx.backends.lwjgl3.audio.Wav.Music.class.getConstructors());
-        RuntimeReflection.register(com.badlogic.gdx.backends.lwjgl3.audio.Mp3.Sound.class.getConstructors());
-        RuntimeReflection.register(com.badlogic.gdx.backends.lwjgl3.audio.Mp3.Music.class.getConstructors());
-        RuntimeReflection.register(com.badlogic.gdx.backends.lwjgl3.audio.OpenALMusic.class);
+
+        // Can be fine-tuned to public Sound (OpenALLwjgl3Audio audio, FileHandle file)
+        access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) ->
+                        RuntimeReflection.register(aClass.getDeclaredConstructors()),
+                com.badlogic.gdx.backends.lwjgl3.audio.OpenALSound.class);
+
+        // Can be fine-tuned to public Music (OpenALLwjgl3Audio audio, FileHandle file)
+        access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) ->
+                        RuntimeReflection.register(aClass.getDeclaredConstructors()),
+                com.badlogic.gdx.backends.lwjgl3.audio.OpenALMusic.class);
+
+
         RuntimeReflection.register(java.nio.Buffer.class.getDeclaredFields());
         RuntimeReflection.register(com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.class);
 
@@ -62,13 +61,11 @@ public class ReflectionRegistrationFeature implements Feature {
         RuntimeReflection.register(org.lwjgl.system.Library.class);
         RuntimeReflection.register(org.lwjgl.system.LibraryResource.class);
         RuntimeReflection.register(org.lwjgl.system.MemoryStack.class);
-        //RuntimeReflection.register(java.lang.Object.class);
 
         RuntimeReflection.register(org.lwjgl.system.CustomBuffer.class);
 
         RuntimeReflection.register(org.lwjgl.system.Pointer.Default.class.getDeclaredFields());
         RuntimeReflection.register(org.lwjgl.system.CustomBuffer.class.getDeclaredFields());
-        //RuntimeReflection.register(org.lwjgl.system.Struct.class.getDeclaredField("container"));
         FeatureUtils.registerForGdxInstantiation(org.lwjgl.system.jni.JNINativeMethod.class);
 
         RuntimeReflection.register(sun.misc.Unsafe.class);
