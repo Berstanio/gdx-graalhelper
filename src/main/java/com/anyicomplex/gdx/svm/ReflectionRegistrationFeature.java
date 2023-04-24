@@ -17,9 +17,12 @@
 
 package com.anyicomplex.gdx.svm;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.oracle.svm.core.annotate.AutomaticFeature;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
+
+import java.lang.reflect.Field;
 
 @AutomaticFeature
 public class ReflectionRegistrationFeature implements Feature {
@@ -27,7 +30,15 @@ public class ReflectionRegistrationFeature implements Feature {
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
         // libGDX
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g2d.BitmapFont.class);
+        try {
+            Field tagClasses = Skin.class.getDeclaredField("defaultTagClasses");
+            tagClasses.setAccessible(true);
+            Class[] defaultTagClasses = (Class[])tagClasses.get(null);
+            FeatureUtils.registerForGdxJSONSerialization(defaultTagClasses);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.audio.Music.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.Pixmap.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.audio.Sound.class);
@@ -41,9 +52,6 @@ public class ReflectionRegistrationFeature implements Feature {
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.glutils.ShaderProgram.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.Cubemap.class);
         RuntimeReflection.register(com.badlogic.gdx.files.FileHandle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g2d.GlyphLayout.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g2d.GlyphLayout.GlyphRun.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.Color.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g2d.Sprite.class);
         FeatureUtils.registerForGdxInstantiation(int[].class);
@@ -53,20 +61,10 @@ public class ReflectionRegistrationFeature implements Feature {
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.VertexAttribute.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.ParallelArray.Channel.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.ModelInstance.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.ParticleController.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.influencers.Influencer.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.emitters.Emitter.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.utils.Array.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.renderers.ParticleControllerRenderer.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.ResourceData.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.ResourceData.SaveData.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.ResourceData.AssetData.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.renderers.BillboardControllerRenderData.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.renderers.PointSpriteControllerRenderData.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.values.ScaledNumericValue.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.values.RangedNumericValue.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.values.GradientColorValue.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.influencers.DynamicsModifier.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.influencers.RegionInfluencer.AspectTextureRegion.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.values.SpawnShapeValue.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g3d.particles.values.PrimitiveSpawnShapeValue.SpawnSide.class);
@@ -77,67 +75,24 @@ public class ReflectionRegistrationFeature implements Feature {
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.Net.HttpRequest.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.math.Rectangle.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.Actor.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.InputEvent.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.Stage.TouchFocus.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.AddAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.RemoveAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.MoveToAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.MoveByAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.SizeToAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.SizeByAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.ScaleByAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.RotateToAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.RotateByAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.ColorAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.AlphaAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.VisibleAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.TouchableAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.RemoveActorAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.DelayAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.TimeScaleAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.SequenceAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.ParallelAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.RepeatAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.RunnableAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.LayoutAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.AfterAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.AddListenerAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.actions.RemoveListenerAction.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle.class);
         FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Image.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.SplitPane.SplitPaneStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Table.DebugRect.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.TextTooltip.TextTooltipStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Tree.TreeStyle.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.Drawable.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.ui.Skin.TintedDrawable.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable.class);
 
-        // TODO: 24.04.2023 Can be fine-tuned to maybe only contain the no-arg constructor
+        FeatureUtils.registerOnlyNoArgConstructor(com.badlogic.gdx.scenes.scene2d.ui.Table.DebugRect.class);
+        FeatureUtils.registerOnlyNoArgConstructor(com.badlogic.gdx.graphics.g2d.GlyphLayout.class);
+        FeatureUtils.registerOnlyNoArgConstructor(com.badlogic.gdx.graphics.g2d.GlyphLayout.GlyphRun.class);
+
         access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) ->
-                        RuntimeReflection.register(aClass.getDeclaredConstructors()),
+                        FeatureUtils.registerOnlyNoArgConstructor(aClass),
                 com.badlogic.gdx.utils.Pool.Poolable.class);
 
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable.class);
+        access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) ->
+                        FeatureUtils.registerOnlyNoArgConstructor(aClass),
+                com.badlogic.gdx.utils.Json.Serializable.class);
+
+        access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) ->
+                        RuntimeReflection.register(aClass.getDeclaredMethods()),
+                com.badlogic.gdx.scenes.scene2d.Actor.class);
+
         FeatureUtils.registerForGdxInstantiation(Object.class);
         FeatureUtils.registerForGdxInstantiation(String.class);
         FeatureUtils.registerForGdxInstantiation(Integer.class);
@@ -170,14 +125,12 @@ public class ReflectionRegistrationFeature implements Feature {
         RuntimeReflection.register(com.badlogic.gdx.math.Ellipse.class);
         RuntimeReflection.register(com.badlogic.gdx.math.GridPoint2.class);
         RuntimeReflection.register(com.badlogic.gdx.math.GridPoint3.class);
-        //RuntimeReflection.register(com.badlogic.gdx.math.Rectangle.class);
         RuntimeReflection.register(com.badlogic.gdx.math.Vector2.class);
         RuntimeReflection.register(com.badlogic.gdx.math.Vector3.class);
         RuntimeReflection.register(com.badlogic.gdx.math.collision.Ray.class);
         RuntimeReflection.register(com.badlogic.gdx.math.collision.Segment.class);
         RuntimeReflection.register(com.badlogic.gdx.math.collision.Sphere.class);
         RuntimeReflection.register(com.badlogic.gdx.scenes.scene2d.Action.class);
-        //RuntimeReflection.register(com.badlogic.gdx.scenes.scene2d.ui.Image.class);
         RuntimeReflection.register(com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable.class);
         RuntimeReflection.register(com.badlogic.gdx.utils.Bits.class);
         RuntimeReflection.register(com.badlogic.gdx.utils.I18NBundle.class);
