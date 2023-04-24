@@ -13,7 +13,7 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
-        compileOnly "org.graalvm.sdk:graal-sdk:$graalvmVersion"
+        compileOnly "org.graalvm.nativeimage:svm:$graalvmVersion"
     }
 }
 
