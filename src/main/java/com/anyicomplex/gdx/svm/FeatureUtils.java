@@ -44,6 +44,22 @@ public class FeatureUtils {
         registerForAnyInstantiation(false, classes);
     }
 
+    public static void registerForGdxJSONSerialization(Class<?>... classes) {
+        registerForAnyInstantiation(false, classes);
+    }
+
+    public static void registerOnlyNoArgConstructor(Class<?>... classes) {
+        for (Class<?> clazz : classes) {
+            if (clazz.isInterface() || clazz.isAnonymousClass())
+                return;
+            try {
+                RuntimeReflection.register(clazz.getDeclaredConstructor());
+            } catch (NoSuchMethodException e) {
+                System.err.println("Tried to register " + clazz.getName() + " no-arg constructor, but it doesn't have one.");
+            }
+        }
+    }
+
     /**
      * <p>Register for class instantiation recursively, with all subclasses and fields' classes, optional with: all constructors' parameters' classes.</p>
      * <p><b>NOTE this method not for serialization.</b></p>
