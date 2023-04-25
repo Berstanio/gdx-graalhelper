@@ -26,7 +26,7 @@ public class ReflectionRegistrationFeature implements Feature {
 
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.class);
+        //FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.class);
     }
 
 }
