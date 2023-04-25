@@ -19,15 +19,21 @@ package com.anyicomplex.gdx.svm;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.oracle.svm.core.annotate.AutomaticFeature;
-import com.oracle.svm.hosted.FeatureImpl;
 import com.oracle.svm.hosted.FeatureImpl.FeatureAccessImpl;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
 import java.lang.reflect.Field;
+import java.util.stream.Collectors;
 
 @AutomaticFeature
 public class ReflectionRegistrationFeature implements Feature {
+
+    @Override
+    public void afterAnalysis(AfterAnalysisAccess access) {
+        FeatureUtils.log("Registered following classes for JSON: ");
+        FeatureUtils.log(FeatureUtils.registered.stream().map(Class::getName).collect(Collectors.joining(", ")) + "\n");
+    }
 
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
