@@ -5,11 +5,7 @@ import com.oracle.svm.hosted.FeatureImpl.FeatureAccessImpl;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeSerialization;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 import java.util.stream.Collectors;
 
 @AutomaticFeature
@@ -29,10 +25,10 @@ public class AnnotationFeature implements Feature {
 	@Override
 	public void beforeAnalysis (BeforeAnalysisAccess access) {
 		FeatureAccessImpl impl = (FeatureAccessImpl) access;
-		impl.findAnnotatedClasses(CollectForReflection.class).forEach(FeatureUtils::registerForGdxJSONSerialization);
+		impl.findAnnotatedClasses(CollectForGDXJsonSerialization.class).forEach(FeatureUtils::registerForGdxJSONSerialization);
 		impl.findAnnotatedClasses(CollectForSerialization.class).forEach(RuntimeSerialization::register);
 
-		collectedForReflection = impl.findAnnotatedClasses(CollectForReflection.class);
+		collectedForReflection = impl.findAnnotatedClasses(CollectForGDXJsonSerialization.class);
 		collectedForReflection.forEach(FeatureUtils::registerForGdxJSONSerialization);
 
 		collectedForSerialization = impl.findAnnotatedClasses(CollectForSerialization.class);
