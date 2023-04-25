@@ -17,13 +17,14 @@
 
 package com.anyicomplex.gdx.svm;
 
-import com.badlogic.gdx.utils.Array;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +33,9 @@ import java.util.Set;
  */
 public class FeatureUtils {
 
-    private static final Set<Class<?>> registered = new HashSet<>();
+    private static final Set<Class<?>> WRAPPER_TYPES = new HashSet<>(Arrays.asList(
+            Boolean.class, Character.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class, String.class));
+    public static final Set<Class<?>> registered = new HashSet<>();
 
     /**
      * <p>libGDX has quite heavy reflection usage, includes all collection classes.
@@ -46,21 +49,51 @@ public class FeatureUtils {
     }
 
     public static void registerForGdxJSONSerialization(Class<?>... classes) {
-        for (Class<?> clazz : classes) {
-            if (registered.contains(clazz)) continue;
-            registered.add(clazz);
-            RuntimeReflection.register(clazz);
-            registerOnlyNoArgConstructor(clazz);
-            for (Field field : clazz.getDeclaredFields()) {
-                registerForGdxJSONSerialization(field.getType());
+        for (Class<?> c : classes) {
+            c = preProcess(c);
+            if (c != null) {
+                registerForGdxJSONSerialization(0, c);
             }
-            for (Field field : clazz.getFields()) {
-                registerForGdxJSONSerialization(field.getType());
-            }
-            RuntimeReflection.register(clazz.getFields());
-            RuntimeReflection.register(clazz.getDeclaredFields());
         }
+    }
 
+    private static Class<?> preProcess(Class<?> toProcess) {
+        if (toProcess.isEnum() || toProcess.isInterface() || WRAPPER_TYPES.contains(toProcess) || toProcess.isPrimitive())
+            return null;
+        if (toProcess.isArray()) {
+            return preProcess(toProcess.getComponentType());
+        }
+        if (registered.contains(toProcess))
+            return null;
+        return toProcess;
+    }
+
+    private static void registerForGdxJSONSerialization(int depth, Class<?> clazz) {
+        registered.add(clazz);
+        RuntimeReflection.register(clazz);
+        registerOnlyNoArgConstructor(clazz);
+        Set<Field> fields = new HashSet<>(Arrays.asList(clazz.getFields()));
+        fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+        fields.removeIf(field -> preProcess(field.getType()) == null);
+        if (fields.size() > 0) {
+            if (depth == 0)
+                log(clazz.getName());
+            log(String.join("", Collections.nCopies(depth + 1, "-")) + "|");
+            fields.forEach(field -> {
+                if (preProcess(field.getType()) == null)
+                    return;
+                log(String.join("", Collections.nCopies(depth + 1, "-")) + field.getName() + ": " + preProcess(field.getType()).getName());
+                registerForGdxJSONSerialization(depth + 1, preProcess(field.getType()));
+            });
+        }
+        RuntimeReflection.register(clazz.getFields());
+        RuntimeReflection.register(clazz.getDeclaredFields());
+    }
+
+    public static void log(String toLog) {
+        if (System.getProperty("SVMHELPER_DEBUG") != null) {
+            System.out.println(toLog);
+        }
     }
 
     public static void registerOnlyNoArgConstructor(Class<?>... classes) {
@@ -70,7 +103,7 @@ public class FeatureUtils {
             try {
                 RuntimeReflection.register(clazz.getDeclaredConstructor());
             } catch (NoSuchMethodException e) {
-                System.err.println("Tried to register " + clazz.getName() + " no-arg constructor, but it doesn't have one.");
+                //System.err.println("Tried to register " + clazz.getName() + " no-arg constructor, but it doesn't have one.");
             }
         }
     }
@@ -87,8 +120,6 @@ public class FeatureUtils {
     // TODO: 11.04.2023 This still holds the danger of just registering WAAAAY to much, this needs to be refined
     public static void registerForAnyInstantiation(boolean registerConstructorsParams, Class<?>... classes) {
         for (Class<?> clazz : classes) {
-            if (registered.contains(clazz)) continue;
-            registered.add(clazz);
             RuntimeReflection.register(clazz);
             RuntimeReflection.register(clazz.getConstructors());
             if (registerConstructorsParams) {
