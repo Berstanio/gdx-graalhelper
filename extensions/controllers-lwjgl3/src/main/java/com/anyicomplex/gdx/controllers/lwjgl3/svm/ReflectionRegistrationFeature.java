@@ -28,10 +28,6 @@ public class ReflectionRegistrationFeature implements Feature {
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
         RuntimeReflection.register(com.badlogic.gdx.controllers.desktop.support.JamepadController.class);
-        FeatureUtils.registerForGdxInstantiation(com.badlogic.gdx.controllers.desktop.JamepadControllerManager.class);
-
-        //Jamepad
-        RuntimeReflection.register(com.studiohartman.jamepad.ControllerManager.class);
+        FeatureUtils.registerOnlyNoArgConstructor(com.badlogic.gdx.controllers.desktop.JamepadControllerManager.class);
     }
-
 }
