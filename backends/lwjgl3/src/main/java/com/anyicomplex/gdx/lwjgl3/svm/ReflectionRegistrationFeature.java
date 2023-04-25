@@ -61,9 +61,9 @@ public class ReflectionRegistrationFeature implements Feature {
                     RuntimeReflection.register(aClass.getDeclaredConstructors()),
                 org.lwjgl.system.Struct.class);
             access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) ->
-                            // Would only need to be one constructor I think, but w/e
-                            RuntimeReflection.register(aClass.getDeclaredConstructors()),
-                    org.lwjgl.system.StructBuffer.class);
+                        // Would only need to be one constructor I think, but w/e
+                        RuntimeReflection.register(aClass.getDeclaredConstructors()),
+                org.lwjgl.system.StructBuffer.class);
 
         } catch (Throwable e) {
             throw new RuntimeException(e);
