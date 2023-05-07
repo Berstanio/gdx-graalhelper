@@ -23,6 +23,10 @@ import com.oracle.svm.core.annotate.TargetClass;
 @TargetClass(org.lwjgl.system.ThreadLocalUtil.class)
 final class Target_org_lwjgl_system_ThreadLocalUtil {
 
+    @Substitute
+    public static void setFunctionMissingAddresses(int functionCount) {
+        // Not support on graal atm https://github.com/oracle/graal/issues/6391
+    }
 }
 
 
