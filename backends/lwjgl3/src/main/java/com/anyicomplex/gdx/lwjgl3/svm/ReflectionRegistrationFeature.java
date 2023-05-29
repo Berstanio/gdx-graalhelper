@@ -22,13 +22,9 @@ import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
 public class ReflectionRegistrationFeature implements Feature {
 
+
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
-
-        boolean isWindows = System.getProperty("os.name").contains("Windows");
-        boolean isLinux = System.getProperty("os.name").contains("Linux");
-        boolean isMac = System.getProperty("os.name").contains("Mac");
-
         try {
 
             // LWJGL3 backend
@@ -53,10 +49,14 @@ public class ReflectionRegistrationFeature implements Feature {
             RuntimeReflection.register(access.findClassByName("java.nio.DirectDoubleBufferU").getDeclaredFields());
 
             RuntimeReflection.register(org.lwjgl.PointerBuffer.class.getDeclaredConstructors());
-            access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) ->
-                    // Would only need to be one constructor I think, but w/e
-                    RuntimeReflection.register(aClass.getDeclaredConstructors()),
-                org.lwjgl.system.Struct.class);
+            access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) -> {
+                        if (Boolean.getBoolean("GRAAL_DEBUG")) {
+                            System.out.println(aClass);
+                        }
+                        // Would only need to be one constructor I think, but w/e
+                        RuntimeReflection.register(aClass.getDeclaredConstructors());
+                    },
+                    org.lwjgl.system.Struct.class);
 
         } catch (Throwable e) {
             throw new RuntimeException(e);
