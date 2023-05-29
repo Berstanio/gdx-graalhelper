@@ -26,58 +26,33 @@ https://github.com/anyicomplex/unlucky-ae
 Step 1. Add the Maven Central repository to your build file
 ```groovy
 allprojects {
-	repositories {
-		...
-		mavenCentral()
-	}
+    repositories {
+        ...
+        mavenCentral()
+    }
 }
 ```
 
 Step 2. Add the dependency based on what you mean. They will register themselves automatically if they are on the classpath.
 ```groovy
 dependencies {
-    implementation 'io.github.berstanio:gdx-svmhelper:1.10.0-SNAPSHOT'
-    implementation 'io.github.berstanio:gdx-svmhelper-backend-lwjgl3:1.10.0-SNAPSHOT'     // LWJGL3
-    implementation 'io.github.berstanio:gdx-svmhelper-backend-moe:1.10.0-SNAPSHOT'        // MOE
-    implementation 'io.github.berstanio:gdx-svmhelper-extension-box2d:1.10.0-SNAPSHOT'    // Box2D
-    implementation 'io.github.berstanio:gdx-svmhelper-extension-bullet:1.10.0-SNAPSHOT'   // Bullet
-    implementation 'io.github.berstanio:gdx-svmhelper-extension-freetype:1.10.0-SNAPSHOT' // FreeType
+    implementation 'io.github.berstanio:gdx-svmhelper:1.11.1-SNAPSHOT'
+    implementation 'io.github.berstanio:gdx-svmhelper-backend-lwjgl3:1.11.1-SNAPSHOT'     // LWJGL3
+    implementation 'io.github.berstanio:gdx-svmhelper-backend-moe:1.11.1-SNAPSHOT'        // MOE
+    implementation 'io.github.berstanio:gdx-svmhelper-extension-box2d:1.11.1-SNAPSHOT'    // Box2D
+    implementation 'io.github.berstanio:gdx-svmhelper-extension-bullet:1.11.1-SNAPSHOT'   // Bullet
+    implementation 'io.github.berstanio:gdx-svmhelper-extension-freetype:1.11.1-SNAPSHOT' // FreeType
     implementation 'io.github.berstanio:gdx-svmhelper-extension-controllers-lwjgl3:2.2.1-SNAPSHOT' // Controllers
 }
 ```
-### 2. Set the shared library path (LWJGL3 backend only)
-You can either add `Lwjgl3NativeImageUtils.setupSharedLibraryPath(String libPath)` to your Launcher's `main(String[] args)`
-```java
-public static void main(String[] args) {
-    // Ensure that path has been set before Lwjgl3Application initialization
-    Lwjgl3NativeImageUtils.setupSharedLibraryPath(); // equal as Lwjgl3NativeImageUtils.setSharedLibraryPath(".");
-    /*Code*/
-    createApplication();
-}
-```
-or set jvmFlag `org.lwjgl.librarypath`  
-At run time:  
-either
-```java
-System.setProperty("org.lwjgl.librarypath", /*Your shared library path*/); // equal as Lwjgl3NativeImageUtils.setSharedLibraryPath(String libPath);
-```
-or
-```sh
-java /*args*/ -Dorg.lwjgl.librarypath=<Your shared library path> /*args*/
-```
-At build time:
-```sh
-native-image /*args*/ -Dorg.lwjgl.librarypath=<Your shared library path> /*args*/
-```
-### 3. Make fat-jar, then build native-image
-You need at least [GraalVM](https://www.graalvm.org/) CE (or EE) v22.0.0 to build.  
-For more information of GraalVM Native Image, please follow [here](https://www.graalvm.org/reference-manual/native-image/) :)  
-You should pass `--report-unsupported-elements-at-runtime` arg to `native-image`, otherwise it will build a fallback image.
-### 4. Copy shared libraries and assets
-Shared libraries can be found at dependency jars, or you can also extract them from the built fat-jar.  
-Put them to `org.lwjgl.librarypath` directory.  
-Assets should be put at the running path of built native-image.
-### 5. All done. Now you can try to run built native-image!
+### 2. Make fat-jar, then build native-image
+You need at least [GraalVM](https://www.graalvm.org/) CE (or EE) v22.3.1 to build.  
+For more information of GraalVM Native Image, please follow [here](https://www.graalvm.org/reference-manual/native-image/) :)
+### 3. Include resources
+You need to configure your resources. You need to pass "-H:IncludeResources=\<java regex>" as a parameter. Please note, that you also need to take care of library inclusion.
+So something like ""-H:IncludeResources=.*.dll" for windows.
+### 4. All done. Now you can try to run built native-image!
 
 ## Special thanks
+[Anyicomplex](https://github.com/anyicomplex/) // The original author
 [Berstanio](https://github.com/Berstanio)
