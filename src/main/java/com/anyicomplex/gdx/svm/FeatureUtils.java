@@ -20,8 +20,6 @@ package com.anyicomplex.gdx.svm;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;

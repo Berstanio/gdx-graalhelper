@@ -17,14 +17,12 @@
 
 package com.anyicomplex.gdx.lwjgl3.svm;
 
-import com.oracle.svm.core.annotate.AutomaticFeature;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeJNIAccess;
 import org.graalvm.nativeimage.hosted.RuntimeResourceAccess;
 
 import java.lang.reflect.Method;
 
-@AutomaticFeature
 public class JNIRegistrationFeature implements Feature {
 
     @Override

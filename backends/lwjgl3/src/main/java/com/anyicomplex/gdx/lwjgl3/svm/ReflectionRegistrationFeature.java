@@ -17,11 +17,9 @@
 
 package com.anyicomplex.gdx.lwjgl3.svm;
 
-import com.oracle.svm.core.annotate.AutomaticFeature;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
-@AutomaticFeature
 public class ReflectionRegistrationFeature implements Feature {
 
     @Override

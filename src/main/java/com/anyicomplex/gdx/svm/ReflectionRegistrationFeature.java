@@ -18,7 +18,6 @@
 package com.anyicomplex.gdx.svm;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.oracle.svm.core.annotate.AutomaticFeature;
 import com.oracle.svm.hosted.FeatureImpl.FeatureAccessImpl;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
@@ -26,7 +25,6 @@ import org.graalvm.nativeimage.hosted.RuntimeReflection;
 import java.lang.reflect.Field;
 import java.util.stream.Collectors;
 
-@AutomaticFeature
 public class ReflectionRegistrationFeature implements Feature {
 
     @Override
