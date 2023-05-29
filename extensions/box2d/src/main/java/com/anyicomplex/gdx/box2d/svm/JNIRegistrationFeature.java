@@ -17,11 +17,9 @@
 
 package com.anyicomplex.gdx.box2d.svm;
 
-import com.oracle.svm.core.annotate.AutomaticFeature;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeJNIAccess;
 
-@AutomaticFeature
 public class JNIRegistrationFeature implements Feature {
 
     @Override

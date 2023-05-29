@@ -19,9 +19,6 @@ package com.anyicomplex.gdx.lwjgl3.svm;
 
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeJNIAccess;
-import org.graalvm.nativeimage.hosted.RuntimeResourceAccess;
-
-import java.lang.reflect.Method;
 
 public class JNIRegistrationFeature implements Feature {
 

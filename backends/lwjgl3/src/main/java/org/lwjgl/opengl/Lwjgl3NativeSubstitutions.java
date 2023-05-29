@@ -3,7 +3,6 @@ package org.lwjgl.opengl;
 import com.oracle.svm.core.annotate.Substitute;
 import com.oracle.svm.core.annotate.TargetClass;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11C;
 import org.lwjgl.system.NativeType;
 
 import static org.lwjgl.system.Checks.CHECKS;

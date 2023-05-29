@@ -19,7 +19,6 @@ package com.anyicomplex.gdx.lwjgl3.svm;
 
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
-import org.lwjgl.glfw.GLFWImage;
 
 public class ReflectionRegistrationFeature implements Feature {
 
@@ -51,21 +50,13 @@ public class ReflectionRegistrationFeature implements Feature {
             RuntimeReflection.register(access.findClassByName("java.nio.DirectDoubleBufferU").getDeclaredFields());
 
             RuntimeReflection.register(org.lwjgl.PointerBuffer.class.getDeclaredConstructors());
-            access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) -> {
-                        if (Boolean.getBoolean("GRAAL_DEBUG")) {
-                            System.out.println("Struct: " + aClass);
-                        }
-                        // Would only need to be one constructor I think, but w/e
-                        RuntimeReflection.register(aClass.getDeclaredConstructors());
-                    },
+            access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) ->
+                            // Would only need to be one constructor I think, but w/e
+                            RuntimeReflection.register(aClass.getDeclaredConstructors()),
                     org.lwjgl.system.Struct.class);
-            access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) -> {
-                        if (Boolean.getBoolean("GRAAL_DEBUG")) {
-                            System.out.println("StructBuffer: " + aClass);
-                        }
-                         // Would only need to be one constructor I think, but w/e
-                            RuntimeReflection.register(aClass.getDeclaredConstructors());
-                    },
+            access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) ->
+                            // Would only need to be one constructor I think, but w/e
+                            RuntimeReflection.register(aClass.getDeclaredConstructors()),
                     org.lwjgl.system.StructBuffer.class);
 
         } catch (Throwable e) {

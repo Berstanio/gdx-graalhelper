@@ -17,7 +17,6 @@
 
 package com.anyicomplex.gdx.moe.svm;
 
-import com.oracle.svm.core.annotate.AutomaticFeature;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeJNIAccess;
 
@@ -30,7 +29,6 @@ import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 
-@AutomaticFeature
 public class JNIRegistrationFeature implements Feature {
 
     @Override
