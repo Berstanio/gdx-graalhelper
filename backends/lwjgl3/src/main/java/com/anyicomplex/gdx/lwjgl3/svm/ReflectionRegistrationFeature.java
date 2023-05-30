@@ -26,6 +26,10 @@ public class ReflectionRegistrationFeature implements Feature {
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
 
+        boolean isWindows = System.getProperty("os.name").contains("Windows");
+        boolean isLinux = System.getProperty("os.name").contains("Linux");
+        boolean isMac = System.getProperty("os.name").contains("Mac");
+
         try {
 
             // LWJGL3 backend
