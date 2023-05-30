@@ -1,6 +1,5 @@
 package com.anyicomplex.gdx.svm;
 
-import com.oracle.svm.core.annotate.AutomaticFeature;
 import com.oracle.svm.hosted.FeatureImpl.FeatureAccessImpl;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeSerialization;
@@ -8,7 +7,6 @@ import org.graalvm.nativeimage.hosted.RuntimeSerialization;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AutomaticFeature
 public class AnnotationFeature implements Feature {
 
 	private static List<Class<?>> collectedForReflection;

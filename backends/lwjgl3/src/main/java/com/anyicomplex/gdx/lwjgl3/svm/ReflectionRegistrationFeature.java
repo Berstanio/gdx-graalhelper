@@ -17,13 +17,11 @@
 
 package com.anyicomplex.gdx.lwjgl3.svm;
 
-import com.oracle.svm.core.annotate.AutomaticFeature;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
-import org.lwjgl.system.StructBuffer;
 
-@AutomaticFeature
 public class ReflectionRegistrationFeature implements Feature {
+
 
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
@@ -57,13 +55,13 @@ public class ReflectionRegistrationFeature implements Feature {
 
             RuntimeReflection.register(org.lwjgl.PointerBuffer.class.getDeclaredConstructors());
             access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) ->
-                    // Would only need to be one constructor I think, but w/e
-                    RuntimeReflection.register(aClass.getDeclaredConstructors()),
-                org.lwjgl.system.Struct.class);
+                            // Would only need to be one constructor I think, but w/e
+                            RuntimeReflection.register(aClass.getDeclaredConstructors()),
+                    org.lwjgl.system.Struct.class);
             access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) ->
-                        // Would only need to be one constructor I think, but w/e
-                        RuntimeReflection.register(aClass.getDeclaredConstructors()),
-                org.lwjgl.system.StructBuffer.class);
+                            // Would only need to be one constructor I think, but w/e
+                            RuntimeReflection.register(aClass.getDeclaredConstructors()),
+                    org.lwjgl.system.StructBuffer.class);
 
         } catch (Throwable e) {
             throw new RuntimeException(e);

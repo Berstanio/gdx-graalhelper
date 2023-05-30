@@ -17,11 +17,8 @@
 
 package com.anyicomplex.gdx.freetype.svm;
 
-import com.anyicomplex.gdx.svm.FeatureUtils;
-import com.oracle.svm.core.annotate.AutomaticFeature;
 import org.graalvm.nativeimage.hosted.Feature;
 
-@AutomaticFeature
 public class ReflectionRegistrationFeature implements Feature {
 
     @Override

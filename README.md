@@ -26,10 +26,10 @@ https://github.com/anyicomplex/unlucky-ae
 Step 1. Add the Maven Central repository to your build file
 ```groovy
 allprojects {
-	repositories {
-		...
-		mavenCentral()
-	}
+    repositories {
+        ...
+        mavenCentral()
+    }
 }
 ```
 
@@ -47,7 +47,7 @@ dependencies {
 ```
 ### 2. Make fat-jar, then build native-image
 You need at least [GraalVM](https://www.graalvm.org/) CE (or EE) v22.3.1 to build.  
-For more information of GraalVM Native Image, please follow [here](https://www.graalvm.org/reference-manual/native-image/) :)  
+For more information of GraalVM Native Image, please follow [here](https://www.graalvm.org/reference-manual/native-image/) :)
 ### 3. Include resources
 You need to configure your resources. You need to pass "-H:IncludeResources=\<java regex>" as a parameter. Please note, that you also need to take care of library inclusion.
 So something like ""-H:IncludeResources=.*.dll" for windows.
