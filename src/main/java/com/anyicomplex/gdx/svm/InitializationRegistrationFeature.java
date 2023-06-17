@@ -24,7 +24,7 @@ public class InitializationRegistrationFeature implements Feature {
 
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
-        RuntimeClassInitialization.initializeAtBuildTime(com.badlogic.gdx.scenes.scene2d.utils.UIUtils.class);
+        //RuntimeClassInitialization.initializeAtBuildTime(com.badlogic.gdx.scenes.scene2d.utils.UIUtils.class);
     }
 
 }
