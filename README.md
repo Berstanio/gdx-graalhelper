@@ -45,14 +45,21 @@ dependencies {
     implementation 'io.github.berstanio:gdx-svmhelper-extension-controllers-lwjgl3:2.2.1-SNAPSHOT' // Controllers
 }
 ```
-### 2. Make fat-jar, then build native-image
+### 2. Minor code adjustment
+For windows you need to add
+```java
+        org.lwjgl.system.Library.initialize();
+        org.lwjgl.system.ThreadLocalUtil.setupEnvData();
+```
+at the beginning of your main method, otherwise the generated image will segfault.
+### 3. Make fat-jar, then build native-image
 You need at least [GraalVM](https://www.graalvm.org/) CE (or EE) v22.3.1 to build.  
 For more information of GraalVM Native Image, please follow [here](https://www.graalvm.org/reference-manual/native-image/) :)
-### 3. Include resources
+### 4. Include resources
 You need to configure your resources. You need to pass "-H:IncludeResources=\<java regex>" as a parameter. Please note, that you also need to take care of library inclusion.
 So something like ""-H:IncludeResources=.*.dll" for windows.
-### 4. All done. Now you can try to run built native-image!
+### 5. All done. Now you can try to run built native-image!
 
 ## Special thanks
-[Anyicomplex](https://github.com/anyicomplex/) // The original author
+[Anyicomplex](https://github.com/anyicomplex/) // The original author  
 [Berstanio](https://github.com/Berstanio)
