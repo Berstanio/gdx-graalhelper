@@ -25,9 +25,7 @@ public class JNIRegistrationFeature implements Feature {
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
         // If not present the image segfaults, which induces mild headache. TODO: Open a graal issue about it
-        access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) -> {
-            RuntimeJNIAccess.register(aClass.getDeclaredMethods());
-        }, org.lwjgl.system.CallbackI.class);
+        RuntimeJNIAccess.register(org.lwjgl.system.CallbackI.class.getDeclaredMethods());
     }
 
 }
