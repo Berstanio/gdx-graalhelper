@@ -1,7 +1,11 @@
 allprojects {
     apply plugin: "java-library"
     group 'io.github.berstanio'
-    sourceCompatibility = 1.8
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(11)
+        }
+    }
     ext {
         gdxVersion = '1.11.1-SNAPSHOT'
         versionSuffix = ''
@@ -13,7 +17,7 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
-        compileOnly "org.graalvm.nativeimage:svm:$graalvmVersion"
+        compileOnlyApi "org.graalvm.nativeimage:svm:$graalvmVersion"
     }
 }
 
