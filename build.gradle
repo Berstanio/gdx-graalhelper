@@ -7,7 +7,7 @@ allprojects {
         }
     }
     ext {
-        gdxVersion = '1.11.1-SNAPSHOT'
+        gdxVersion = '1.12.1-SNAPSHOT'
         versionSuffix = ''
         gdxControllersVersion = '2.2.1'
         graalvmVersion = '22.3.1'
