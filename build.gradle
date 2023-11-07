@@ -7,9 +7,9 @@ allprojects {
         }
     }
     ext {
-        gdxVersion = '1.12.1-SNAPSHOT'
+        gdxVersion = '1.12.1'
         versionSuffix = ''
-        gdxControllersVersion = '2.2.1'
+        gdxControllersVersion = '2.2.3'
         graalvmVersion = '22.3.1'
     }
     repositories {
