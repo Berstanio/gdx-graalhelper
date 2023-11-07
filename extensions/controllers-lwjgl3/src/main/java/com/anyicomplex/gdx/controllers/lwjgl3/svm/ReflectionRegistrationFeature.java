@@ -25,7 +25,7 @@ public class ReflectionRegistrationFeature implements Feature {
 
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
-        RuntimeReflection.register(com.badlogic.gdx.controllers.desktop.support.JamepadController.class);
+        RuntimeReflection.register(com.badlogic.gdx.controllers.desktop.JamepadControllerManager.class);
         FeatureUtils.registerOnlyNoArgConstructor(com.badlogic.gdx.controllers.desktop.JamepadControllerManager.class);
     }
 }
