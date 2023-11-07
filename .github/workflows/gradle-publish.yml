@@ -46,7 +46,7 @@ jobs:
 
 
     - name: Import GPG key
-      # if: github.event_name == 'release'
+      if: github.event_name == 'release'
       id: import_gpg
       uses: crazy-max/ghaction-import-gpg@1c6a9e9d3594f2d743f1b1dd7669ab0dfdffa922
       with:
@@ -54,7 +54,7 @@ jobs:
         passphrase: ${{ secrets.SIGNING_PASSWORD }}
 
     - name: Publish to Maven Central
-      # if: github.event_name == 'release'
+      if: github.event_name == 'release'
       run: ./gradlew publish -PRELEASE -Psigning.gnupg.keyId=${{ secrets.KEY_ID }} -Psigning.gnupg.passphrase=${{ secrets.SIGNING_PASSWORD }} -Psigning.gnupg.keyName=${{ secrets.KEY_ID }}
       env:
         MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
