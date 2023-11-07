@@ -53,13 +53,9 @@ jobs:
         gpg-private-key: ${{ secrets.SIGNING_KEY }}
         passphrase: ${{ secrets.SIGNING_PASSWORD }}
 
-
-    - name: Inspect KEY-ID
-      run: gpg --list-keys
-
     - name: Publish to Maven Central
-      run: ./gradlew publish -PRELEASE
-      if: github.event_name == 'release'
+      # if: github.event_name == 'release'
+      run: ./gradlew publish -PRELEASE -Psigning.gnupg.keyId=${{ secrets.KEY_ID }} -Psigning.gnupg.passphrase=${{ secrets.SIGNING_PASSWORD }} -Psigning.gnupg.keyName=${{ secrets.KEY_ID }}
       env:
         MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
