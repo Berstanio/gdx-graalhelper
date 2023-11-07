@@ -45,6 +45,13 @@ project(":backends:lwjgl3") {
     }
 }
 
+project(":backends:moe") {
+    version gdxVersion + versionSuffix
+    dependencies {
+
+    }
+}
+
 project(":extensions:box2d") {
     version gdxVersion + versionSuffix
     dependencies {
