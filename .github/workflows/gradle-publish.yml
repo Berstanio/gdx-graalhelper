@@ -37,18 +37,29 @@ jobs:
 
     - name: Build
       run: ./gradlew build
-      env:
-        MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-        MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-        SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
 
-    # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
-    # the publishing section of your build.gradle
-    - name: Publish to Maven Central
+    - name: Publish Snapshot
       run: ./gradlew publish
       env:
         MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-        SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+
+
+    - name: Import GPG key
+      # if: github.event_name == 'release'
+      id: import_gpg
+      uses: crazy-max/ghaction-import-gpg@1c6a9e9d3594f2d743f1b1dd7669ab0dfdffa922
+      with:
+        gpg-private-key: ${{ secrets.SIGNING_KEY }}
+        passphrase: ${{ secrets.SIGNING_PASSWORD }}
+
+
+    - name: Inspect KEY-ID
+      run: gpg --list-keys
+
+    - name: Publish to Maven Central
+      run: ./gradlew publish -PRELEASE
+      if: github.event_name == 'release'
+      env:
+        MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}

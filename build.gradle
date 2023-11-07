@@ -1,3 +1,17 @@
+ext {
+    isReleaseBuild = {
+        return project.hasProperty("RELEASE")
+    }
+
+    gdxVersion = '1.12.1'
+    versionSuffix = {
+        isReleaseBuild() ? "" : "-SNAPSHOT"
+    }
+    gdxControllersVersion = '2.2.3'
+    graalvmVersion = '22.3.1'
+
+}
+
 allprojects {
     apply plugin: "java-library"
     group 'io.github.berstanio'
@@ -5,12 +19,6 @@ allprojects {
         toolchain {
             languageVersion = JavaLanguageVersion.of(11)
         }
-    }
-    ext {
-        gdxVersion = '1.12.1'
-        versionSuffix = ''
-        gdxControllersVersion = '2.2.3'
-        graalvmVersion = '22.3.1'
     }
     repositories {
         mavenCentral()
@@ -156,7 +164,7 @@ configure([
                     username = System.getenv("MAVEN_USERNAME")
                     password = System.getenv("MAVEN_PASSWORD")
                 }
-                if (project.version.endsWith("-SNAPSHOT")) {
+                if (isReleaseBuild()) {
                     url "https://s01.oss.sonatype.org/content/repositories/snapshots"
                 } else {
                     url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
@@ -165,7 +173,16 @@ configure([
         }
     }
 
+    signing {
+        useGpgCmd()
+        sign publishing.publications.mavenJava
+    }
 
-
+    //Simply using "required" in signing block doesn't work because taskGraph isn't ready yet.
+    gradle.taskGraph.whenReady {
+        tasks.withType(Sign) {
+            onlyIf { isReleaseBuild() }
+        }
+    }
 }
 
