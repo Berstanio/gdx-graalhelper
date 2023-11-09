@@ -17,6 +17,7 @@
 
 package com.anyicomplex.gdx.svm;
 
+import com.oracle.svm.hosted.FeatureImpl.FeatureAccessImpl;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
@@ -35,11 +36,11 @@ public class FeatureUtils {
             Boolean.class, Character.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class, String.class));
     public static final Set<Class<?>> registered = new HashSet<>();
 
-    public static void registerForGdxJSONSerialization(Class<?>... classes) {
+    public static void registerForGdxJSONSerialization(FeatureAccessImpl access, Class<?>... classes) {
         for (Class<?> c : classes) {
             c = preProcess(c);
             if (c != null) {
-                registerForGdxJSONSerialization(0, c);
+                registerForGdxJSONSerialization(access, 0, c);
             }
         }
     }
@@ -55,12 +56,13 @@ public class FeatureUtils {
         return toProcess;
     }
 
-    private static void registerForGdxJSONSerialization(int depth, Class<?> clazz) {
+    private static void registerForGdxJSONSerialization(FeatureAccessImpl access, int depth, Class<?> clazz) {
         registered.add(clazz);
         RuntimeReflection.register(clazz);
         registerOnlyNoArgConstructor(clazz);
         if (clazz.getSuperclass() != null)
-            registerForGdxJSONSerialization(clazz.getSuperclass());
+            registerForGdxJSONSerialization(access, clazz.getSuperclass());
+        access.findSubclasses(clazz).forEach(aClass -> registerForGdxJSONSerialization(access, aClass));
         Set<Field> fields = new HashSet<>(Arrays.asList(clazz.getFields()));
         fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
         fields.removeIf(field -> preProcess(field.getType()) == null);
@@ -72,7 +74,7 @@ public class FeatureUtils {
                 if (preProcess(field.getType()) == null)
                     return;
                 log(String.join("", Collections.nCopies(depth + 1, "-")) + field.getName() + ": " + preProcess(field.getType()).getName());
-                registerForGdxJSONSerialization(depth + 1, preProcess(field.getType()));
+                registerForGdxJSONSerialization(access, depth + 1, preProcess(field.getType()));
             });
         }
         RuntimeReflection.register(clazz.getFields());

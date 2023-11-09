@@ -23,11 +23,9 @@ public class AnnotationFeature implements Feature {
 	@Override
 	public void beforeAnalysis (BeforeAnalysisAccess access) {
 		FeatureAccessImpl impl = (FeatureAccessImpl) access;
-		impl.findAnnotatedClasses(CollectForGDXJsonSerialization.class).forEach(FeatureUtils::registerForGdxJSONSerialization);
-		impl.findAnnotatedClasses(CollectForSerialization.class).forEach(RuntimeSerialization::register);
 
 		collectedForReflection = impl.findAnnotatedClasses(CollectForGDXJsonSerialization.class);
-		collectedForReflection.forEach(FeatureUtils::registerForGdxJSONSerialization);
+		collectedForReflection.forEach(aClass -> FeatureUtils.registerForGdxJSONSerialization(impl, aClass));
 
 		collectedForSerialization = impl.findAnnotatedClasses(CollectForSerialization.class);
 		collectedForSerialization.forEach(RuntimeSerialization::register);
