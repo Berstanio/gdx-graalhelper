@@ -18,6 +18,7 @@
 package com.anyicomplex.gdx.svm;
 
 import com.oracle.svm.hosted.FeatureImpl.FeatureAccessImpl;
+import com.oracle.svm.util.ReflectionUtil;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
@@ -25,6 +26,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -46,7 +48,7 @@ public class FeatureUtils {
     }
 
     private static Class<?> preProcess(Class<?> toProcess) {
-        if (toProcess.isEnum() || toProcess.isInterface() || WRAPPER_TYPES.contains(toProcess) || toProcess.isPrimitive())
+        if (toProcess.isEnum() || toProcess.isInterface() || WRAPPER_TYPES.contains(toProcess) || toProcess.isPrimitive() || toProcess == Object.class)
             return null;
         if (toProcess.isArray()) {
             return preProcess(toProcess.getComponentType());
@@ -56,6 +58,14 @@ public class FeatureUtils {
         return toProcess;
     }
 
+    private static Set<Field> getAllFields(Class<?> aClass) {
+        Set<Field> fields = new HashSet<>(List.of(aClass.getFields()));
+        fields.addAll(List.of(aClass.getDeclaredFields()));
+        if (aClass.getSuperclass() != null && aClass != Object.class)
+            fields.addAll(getAllFields(aClass.getSuperclass()));
+        return fields;
+    }
+
     private static void registerForGdxJSONSerialization(FeatureAccessImpl access, int depth, Class<?> clazz) {
         registered.add(clazz);
         RuntimeReflection.register(clazz);
@@ -63,8 +73,7 @@ public class FeatureUtils {
         if (clazz.getSuperclass() != null)
             registerForGdxJSONSerialization(access, clazz.getSuperclass());
         access.findSubclasses(clazz).forEach(aClass -> registerForGdxJSONSerialization(access, aClass));
-        Set<Field> fields = new HashSet<>(Arrays.asList(clazz.getFields()));
-        fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+        Set<Field> fields = getAllFields(clazz);
         fields.removeIf(field -> preProcess(field.getType()) == null);
         if (fields.size() > 0) {
             if (depth == 0)
