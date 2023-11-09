@@ -59,6 +59,8 @@ public class FeatureUtils {
         registered.add(clazz);
         RuntimeReflection.register(clazz);
         registerOnlyNoArgConstructor(clazz);
+        if (clazz.getSuperclass() != null)
+            registerForGdxJSONSerialization(clazz.getSuperclass());
         Set<Field> fields = new HashSet<>(Arrays.asList(clazz.getFields()));
         fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
         fields.removeIf(field -> preProcess(field.getType()) == null);
