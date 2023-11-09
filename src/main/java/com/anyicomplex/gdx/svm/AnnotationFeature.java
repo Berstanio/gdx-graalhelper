@@ -27,7 +27,7 @@ public class AnnotationFeature implements Feature {
 		FeatureAccessImpl impl = (FeatureAccessImpl) access;
 
 		collectedForReflection = impl.findAnnotatedClasses(CollectForGDXJsonSerialization.class);
-		collectedForReflection.forEach(aClass -> FeatureUtils.registerForGdxJSONSerialization(impl, aClass));
+		collectedForReflection.forEach(aClass -> FeatureUtils.registerForGdxJSONSerialization(access, aClass));
 
 		collectedForSerialization = impl.findAnnotatedClasses(CollectForSerialization.class);
 		collectedForSerialization.forEach(RuntimeSerialization::register);
