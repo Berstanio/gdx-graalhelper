@@ -35,17 +35,17 @@ public class ReflectionRegistrationFeature implements Feature {
 
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
-        FeatureAccessImpl impl = (FeatureAccessImpl) access;
-
         // libGDX
         try {
             Field tagClasses = Skin.class.getDeclaredField("defaultTagClasses");
             tagClasses.setAccessible(true);
             Class[] defaultTagClasses = (Class[])tagClasses.get(null);
-            FeatureUtils.registerForGdxJSONSerialization(impl, defaultTagClasses);
+            FeatureUtils.registerForGdxJSONSerialization(access, defaultTagClasses);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+
+        FeatureAccessImpl impl = (FeatureAccessImpl) access;
 
         FeatureUtils.registerOnlyNoArgConstructor(com.badlogic.gdx.scenes.scene2d.ui.Table.DebugRect.class);
 
@@ -66,17 +66,17 @@ public class ReflectionRegistrationFeature implements Feature {
 
         RuntimeReflection.register(com.badlogic.gdx.graphics.g3d.particles.renderers.BillboardControllerRenderData[].class);
         access.registerReachabilityHandler(duringAnalysisAccess ->
-                        FeatureUtils.registerForGdxJSONSerialization(impl, com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch.Config.class)
+                        FeatureUtils.registerForGdxJSONSerialization(access, com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch.Config.class)
                 , com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch.class);
         access.registerReachabilityHandler(duringAnalysisAccess ->
                         RuntimeReflection.register(com.badlogic.gdx.graphics.g3d.particles.ResourceData.SaveData[].class),
                 com.badlogic.gdx.graphics.g3d.particles.ResourceData.class);
 
-        access.registerReachabilityHandler(duringAnalysisAccess -> FeatureUtils.registerForGdxJSONSerialization(impl, com.badlogic.gdx.graphics.g2d.ParticleEffect.class),
+        access.registerReachabilityHandler(duringAnalysisAccess -> FeatureUtils.registerForGdxJSONSerialization(access, com.badlogic.gdx.graphics.g2d.ParticleEffect.class),
                 com.badlogic.gdx.graphics.g2d.ParticleEffect.class);
 
         access.registerReachabilityHandler(duringAnalysisAccess -> {
-                    FeatureUtils.registerForGdxJSONSerialization(impl, com.badlogic.gdx.graphics.g3d.particles.ParticleEffect.class);
+                    FeatureUtils.registerForGdxJSONSerialization(access, com.badlogic.gdx.graphics.g3d.particles.ParticleEffect.class);
                     RuntimeReflection.register(com.badlogic.gdx.graphics.g3d.particles.ParticleController[].class);
                     RuntimeReflection.register(com.badlogic.gdx.graphics.g3d.particles.emitters.RegularEmitter.class);
                     impl.findSubclasses(com.badlogic.gdx.graphics.g3d.particles.emitters.Emitter.class).forEach(FeatureUtils::registerOnlyNoArgConstructor);

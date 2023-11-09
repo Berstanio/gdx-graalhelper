@@ -17,9 +17,11 @@
 
 package com.anyicomplex.gdx.svm;
 
+import com.oracle.svm.hosted.FeatureImpl.BeforeAnalysisAccessImpl;
 import com.oracle.svm.hosted.FeatureImpl.FeatureAccessImpl;
 import com.oracle.svm.util.ReflectionUtil;
 import org.graalvm.nativeimage.hosted.Feature;
+import org.graalvm.nativeimage.hosted.Feature.BeforeAnalysisAccess;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
 import java.lang.reflect.Field;
@@ -38,11 +40,11 @@ public class FeatureUtils {
             Boolean.class, Character.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class, String.class));
     public static final Set<Class<?>> registered = new HashSet<>();
 
-    public static void registerForGdxJSONSerialization(FeatureAccessImpl access, Class<?>... classes) {
+    public static void registerForGdxJSONSerialization(BeforeAnalysisAccess access, Class<?>... classes) {
         for (Class<?> c : classes) {
             c = preProcess(c);
             if (c != null) {
-                registerForGdxJSONSerialization(access, 0, c);
+                registerForGdxJSONSerialization((BeforeAnalysisAccessImpl) access, 0, c);
             }
         }
     }
@@ -66,7 +68,7 @@ public class FeatureUtils {
         return fields;
     }
 
-    private static void registerForGdxJSONSerialization(FeatureAccessImpl access, int depth, Class<?> clazz) {
+    private static void registerForGdxJSONSerialization(BeforeAnalysisAccessImpl access, int depth, Class<?> clazz) {
         registered.add(clazz);
         RuntimeReflection.register(clazz);
         registerOnlyNoArgConstructor(clazz);
