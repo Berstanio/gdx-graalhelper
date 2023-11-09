@@ -13,6 +13,9 @@ ext {
 allprojects {
     apply plugin: "java-library"
     group 'io.github.berstanio'
+}
+
+configure(allprojects - project(":annotations")) {
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(11)
@@ -30,17 +33,22 @@ allprojects {
 version gdxVersion + versionSuffix
 dependencies {
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    api project(":annotations")
 }
 
-subprojects {
-    dependencies {
-        implementation project(":")
+project(":annotations") {
+    version "1.0.0" + (isReleaseBuild() ? "" : "-SNAPSHOT")
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(8)
+        }
     }
 }
 
 project(":backends:lwjgl3") {
     version gdxVersion + versionSuffix
     dependencies {
+        implementation project(":")
         implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     }
 }
@@ -48,13 +56,14 @@ project(":backends:lwjgl3") {
 project(":backends:moe") {
     version gdxVersion + versionSuffix
     dependencies {
-
+        implementation project(":")
     }
 }
 
 project(":extensions:box2d") {
     version gdxVersion + versionSuffix
     dependencies {
+        implementation project(":")
         implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     }
 }
@@ -62,6 +71,7 @@ project(":extensions:box2d") {
 project(":extensions:bullet") {
     version gdxVersion + versionSuffix
     dependencies {
+        implementation project(":")
         implementation "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
     }
 }
@@ -69,6 +79,7 @@ project(":extensions:bullet") {
 project(":extensions:freetype") {
     version gdxVersion + versionSuffix
     dependencies {
+        implementation project(":")
         implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     }
 }
@@ -76,6 +87,7 @@ project(":extensions:freetype") {
 project(":extensions:controllers-lwjgl3") {
     version gdxControllersVersion + versionSuffix
     dependencies {
+        implementation project(":")
         implementation "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
     }
 }
@@ -83,12 +95,13 @@ project(":extensions:controllers-lwjgl3") {
 project(":extensions:controllers-moe") {
     version gdxControllersVersion + versionSuffix
     dependencies {
-        //Dependencies coming
+        implementation project(":")
     }
 }
 
 configure([
         project(":"),
+        project(":annotations"),
         project(":backends:lwjgl3"),
         project(":backends:moe"),
         project(":extensions:box2d"),

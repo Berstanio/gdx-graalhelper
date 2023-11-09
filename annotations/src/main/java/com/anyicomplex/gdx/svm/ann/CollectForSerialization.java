@@ -1,4 +1,4 @@
-package com.anyicomplex.gdx.svm;
+package com.anyicomplex.gdx.svm.ann;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

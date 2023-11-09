@@ -1,5 +1,7 @@
 package com.anyicomplex.gdx.svm;
 
+import com.anyicomplex.gdx.svm.ann.CollectForGDXJsonSerialization;
+import com.anyicomplex.gdx.svm.ann.CollectForSerialization;
 import com.oracle.svm.hosted.FeatureImpl.FeatureAccessImpl;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeSerialization;
