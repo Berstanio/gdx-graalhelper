@@ -4,7 +4,7 @@ ext {
     }
 
     gdxVersion = '1.12.1'
-    versionSuffix = (isReleaseBuild() ? "" : "-SNAPSHOT")
+    versionSuffix = ".1" + (isReleaseBuild() ? "" : "-SNAPSHOT")
     gdxControllersVersion = '2.2.3'
     graalvmVersion = '22.3.1'
 
