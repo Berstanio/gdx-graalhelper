@@ -17,6 +17,17 @@
 
 package com.anyicomplex.gdx.svm;
 
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.IntMap;
+import com.badlogic.gdx.utils.IntSet;
+import com.badlogic.gdx.utils.LongMap;
+import com.badlogic.gdx.utils.ObjectFloatMap;
+import com.badlogic.gdx.utils.ObjectIntMap;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ObjectSet;
+import com.badlogic.gdx.utils.Queue;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.oracle.svm.hosted.FeatureImpl.BeforeAnalysisAccessImpl;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.Feature.BeforeAnalysisAccess;
@@ -25,9 +36,12 @@ import org.graalvm.nativeimage.hosted.RuntimeReflection;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -37,6 +51,10 @@ public class FeatureUtils {
 
     private static final Set<Class<?>> WRAPPER_TYPES = new HashSet<>(Arrays.asList(
             Boolean.class, Character.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class, String.class));
+
+    public static final Set<Class<?>> SPECIAL_SERIALIZATION = new HashSet<>(Arrays.asList(ObjectMap.class,
+            ObjectIntMap.class, ObjectFloatMap.class, ObjectSet.class, IntMap.class, LongMap.class, IntSet.class,
+            ArrayMap.class, Map.class, Array.class, Queue.class, Collection.class));
     public static final Set<Class<?>> registered = new HashSet<>();
 
     public static void registerForGdxJSONSerialization(BeforeAnalysisAccess access, Class<?>... classes) {
@@ -49,6 +67,8 @@ public class FeatureUtils {
     }
 
     private static Class<?> preProcess(Class<?> toProcess) {
+        if (SPECIAL_SERIALIZATION.stream().anyMatch(aClass -> ClassReflection.isAssignableFrom(aClass, toProcess)))
+            return null;
         if (toProcess.isEnum() || toProcess.isInterface() || WRAPPER_TYPES.contains(toProcess) || toProcess.isPrimitive() || toProcess == Object.class)
             return null;
         if (toProcess.isArray()) {
@@ -71,9 +91,10 @@ public class FeatureUtils {
         registered.add(clazz);
         RuntimeReflection.register(clazz);
         registerOnlyNoArgConstructor(clazz);
-        if (clazz.getSuperclass() != null)
-            registerForGdxJSONSerialization(access, clazz.getSuperclass());
-        access.findSubclasses(clazz).forEach(aClass -> registerForGdxJSONSerialization(access, aClass));
+
+        access.findSubclasses(clazz).stream().map(FeatureUtils::preProcess).filter(Objects::nonNull)
+                .peek(aClass -> log(String.join("", Collections.nCopies(depth, "-")) + ">" + aClass.getName()))
+                .forEach(aClass -> registerForGdxJSONSerialization(access, depth + 1, aClass));
         Set<Field> fields = getAllFields(clazz);
         fields.removeIf(field -> preProcess(field.getType()) == null
                 || Modifier.isStatic(field.getModifiers())

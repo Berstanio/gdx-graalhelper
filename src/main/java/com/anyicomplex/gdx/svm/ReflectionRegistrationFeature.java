@@ -49,6 +49,8 @@ public class ReflectionRegistrationFeature implements Feature {
 
         FeatureUtils.registerOnlyNoArgConstructor(com.badlogic.gdx.scenes.scene2d.ui.Table.DebugRect.class);
 
+        FeatureUtils.SPECIAL_SERIALIZATION.stream().peek(RuntimeReflection::register).forEach(FeatureUtils::registerOnlyNoArgConstructor);
+
         access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) ->
                         FeatureUtils.registerOnlyNoArgConstructor(aClass),
                 com.badlogic.gdx.utils.Pool.Poolable.class);
