@@ -110,8 +110,7 @@ public class FeatureUtils {
                 registerForGdxJSONSerialization(access, depth + 1, preProcess(field.getType()));
             });
         }
-        RuntimeReflection.register(clazz.getFields());
-        RuntimeReflection.register(clazz.getDeclaredFields());
+        RuntimeReflection.register(getAllFields(clazz).toArray(Field[]::new));
     }
 
     public static void log(String toLog) {
