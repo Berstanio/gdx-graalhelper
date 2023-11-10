@@ -131,4 +131,15 @@ public class FeatureUtils {
             }
         }
     }
+
+    public static void guard(String version, Runnable toRun) {
+        try {
+            toRun.run();
+        } catch (Throwable e) {
+            System.out.println("Warning: Version " + version + " seems to be not used, report this if this is not the case.");
+            if (System.getProperty("SVMHELPER_DEBUG") != null) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
