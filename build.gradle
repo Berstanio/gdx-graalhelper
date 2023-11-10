@@ -124,8 +124,10 @@ configure([
                 def idStr = rootProject.name
                 if (project.name != rootProject.name) {
                     idStr += "-"
-                    idStr += project.parent.name.substring(0, project.parent.name.length() - 1)
-                    idStr += "-"
+                    if (project.parent.name != rootProject.name) {
+                        idStr += project.parent.name.substring(0, project.parent.name.length() - 1)
+                        idStr += "-"
+                    }
                     idStr += project.name
                 }
                 artifactId = idStr
