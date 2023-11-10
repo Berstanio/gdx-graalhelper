@@ -18,13 +18,12 @@
 package com.anyicomplex.gdx.svm;
 
 import com.oracle.svm.hosted.FeatureImpl.BeforeAnalysisAccessImpl;
-import com.oracle.svm.hosted.FeatureImpl.FeatureAccessImpl;
-import com.oracle.svm.util.ReflectionUtil;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.Feature.BeforeAnalysisAccess;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -76,8 +75,10 @@ public class FeatureUtils {
             registerForGdxJSONSerialization(access, clazz.getSuperclass());
         access.findSubclasses(clazz).forEach(aClass -> registerForGdxJSONSerialization(access, aClass));
         Set<Field> fields = getAllFields(clazz);
-        fields.removeIf(field -> preProcess(field.getType()) == null);
-        if (fields.size() > 0) {
+        fields.removeIf(field -> preProcess(field.getType()) == null
+                || Modifier.isStatic(field.getModifiers())
+                || Modifier.isTransient(field.getModifiers()));
+        if (!fields.isEmpty()) {
             if (depth == 0)
                 log(clazz.getName());
             log(String.join("", Collections.nCopies(depth + 1, "-")) + "|");
