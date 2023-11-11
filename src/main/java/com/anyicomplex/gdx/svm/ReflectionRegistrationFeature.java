@@ -18,6 +18,7 @@
 package com.anyicomplex.gdx.svm;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.oracle.svm.hosted.FeatureImpl.FeatureAccessImpl;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
@@ -50,6 +51,8 @@ public class ReflectionRegistrationFeature implements Feature {
         FeatureUtils.registerOnlyNoArgConstructor(com.badlogic.gdx.scenes.scene2d.ui.Table.DebugRect.class);
 
         FeatureUtils.SPECIAL_SERIALIZATION.stream().peek(RuntimeReflection::register).forEach(FeatureUtils::registerOnlyNoArgConstructor);
+
+        impl.findSubclasses(Drawable.class).forEach(aClass -> FeatureUtils.registerForGdxJSONSerialization(access, aClass));
 
         access.registerSubtypeReachabilityHandler((duringAnalysisAccess, aClass) ->
                         FeatureUtils.registerOnlyNoArgConstructor(aClass),
