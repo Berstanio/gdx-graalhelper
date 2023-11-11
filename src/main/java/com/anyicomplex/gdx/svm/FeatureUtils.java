@@ -76,6 +76,10 @@ public class FeatureUtils {
         }
         if (registered.contains(toProcess))
             return null;
+        if (!toProcess.getModule().equals(FeatureUtils.class.getModule())) {
+            log("Bailout for class: " + toProcess.getName() + " because it was loaded from a different module.");
+            return null;
+        }
         return toProcess;
     }
 
