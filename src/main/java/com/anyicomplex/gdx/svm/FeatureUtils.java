@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Simple utility class for {@link Feature}s.
@@ -103,9 +104,16 @@ public class FeatureUtils {
         fields.removeIf(field -> preProcess(field.getType()) == null
                 || Modifier.isStatic(field.getModifiers())
                 || Modifier.isTransient(field.getModifiers()));
+        if (depth == 0) {
+            log(clazz.getName());
+            String trace = Arrays.stream(new RuntimeException().getStackTrace())
+                    .filter(stackTraceElement -> Objects.equals(FeatureUtils.class.getModule().getName(), stackTraceElement.getModuleName()))
+                    .map(StackTraceElement::toString)
+                    .map(string -> "\tat " + string)
+                    .collect(Collectors.joining("\n"));
+            trace(trace);
+        }
         if (!fields.isEmpty()) {
-            if (depth == 0)
-                log(clazz.getName());
             log(String.join("", Collections.nCopies(depth + 1, "-")) + "|");
             fields.forEach(field -> {
                 if (preProcess(field.getType()) == null)
@@ -118,7 +126,13 @@ public class FeatureUtils {
     }
 
     public static void log(String toLog) {
-        if (System.getProperty("SVMHELPER_DEBUG") != null) {
+        if (System.getProperty("SVMHELPER_DEBUG") != null || System.getProperty("SVMHELPER_DEBUG_TRACE") != null) {
+            System.out.println(toLog);
+        }
+    }
+
+    public static void trace(String toLog) {
+        if (System.getProperty("SVMHELPER_DEBUG_TRACE") != null) {
             System.out.println(toLog);
         }
     }
