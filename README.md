@@ -32,13 +32,14 @@ allprojects {
 Step 2. Add the dependency based on what you need. They will register themselves automatically if they are on the classpath.
 ```groovy
 dependencies {
-    implementation 'io.github.berstanio:gdx-svmhelper:1.12.1'
-    implementation 'io.github.berstanio:gdx-svmhelper-backend-lwjgl3:1.12.1'     // LWJGL3
-    implementation 'io.github.berstanio:gdx-svmhelper-backend-moe:1.12.1'        // MOE
-    implementation 'io.github.berstanio:gdx-svmhelper-extension-box2d:1.12.1'    // Box2D
-    implementation 'io.github.berstanio:gdx-svmhelper-extension-bullet:1.12.1'   // Bullet
-    implementation 'io.github.berstanio:gdx-svmhelper-extension-freetype:1.12.1' // FreeType
-    implementation 'io.github.berstanio:gdx-svmhelper-extension-controllers-lwjgl3:2.2.3' // Controllers
+    implementation 'io.github.berstanio:gdx-svmhelper-annotations:2.0.0'        // Annotations only
+    implementation 'io.github.berstanio:gdx-svmhelper:2.0.0'
+    implementation 'io.github.berstanio:gdx-svmhelper-backend-lwjgl3:2.0.0'     // LWJGL3
+    implementation 'io.github.berstanio:gdx-svmhelper-backend-moe:2.0.0'        // MOE
+    implementation 'io.github.berstanio:gdx-svmhelper-extension-box2d:2.0.0'    // Box2D
+    implementation 'io.github.berstanio:gdx-svmhelper-extension-bullet:2.0.0'   // Bullet
+    implementation 'io.github.berstanio:gdx-svmhelper-extension-freetype:2.0.0' // FreeType
+    implementation 'io.github.berstanio:gdx-svmhelper-extension-controllers-lwjgl3:2.0.0' // Controllers
 }
 ```
 ### 2. Make fat-jar, then build native-image
