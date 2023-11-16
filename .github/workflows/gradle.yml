@@ -8,9 +8,6 @@
 name: Java CI with Gradle
 
 on:
-  workflow_dispatch:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -33,8 +30,3 @@ jobs:
 
     - name: Build with Gradle
       run: ./gradlew build
-      env:
-        MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-        MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-        SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}

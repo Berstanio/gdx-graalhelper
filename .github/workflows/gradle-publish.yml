@@ -8,6 +8,8 @@
 name: Publish to Maven Central
 
 on:
+  push:
+    branches: [ master ]
   workflow_dispatch:
   release:
     types: [created]
