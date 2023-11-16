@@ -32,8 +32,8 @@ configure(allprojects - project(":annotations")) {
 }
 
 dependencies {
-    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     api project(":annotations")
+    compileOnly "com.badlogicgames.gdx:gdx:$gdxVersion"
 }
 
 project(":annotations") {
@@ -46,48 +46,48 @@ project(":annotations") {
 
 project(":backends:lwjgl3") {
     dependencies {
-        implementation project(":")
-        implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        api project(":")
+        compileOnly "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     }
 }
 
 project(":backends:moe") {
     dependencies {
-        implementation project(":")
+        api project(":")
     }
 }
 
 project(":extensions:box2d") {
     dependencies {
-        implementation project(":")
-        implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        api project(":")
+        compileOnly "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     }
 }
 
 project(":extensions:bullet") {
     dependencies {
-        implementation project(":")
-        implementation "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
+        api project(":")
+        compileOnly "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
     }
 }
 
 project(":extensions:freetype") {
     dependencies {
-        implementation project(":")
-        implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        api project(":")
+        compileOnly "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     }
 }
 
 project(":extensions:controllers-lwjgl3") {
     dependencies {
-        implementation project(":")
-        implementation "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
+        api project(":")
+        compileOnly "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
     }
 }
 
 project(":extensions:controllers-moe") {
     dependencies {
-        implementation project(":")
+        api project(":")
     }
 }
 
