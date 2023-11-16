@@ -1,4 +1,4 @@
-# gdx-svmhelper [![Java CI with Gradle](https://github.com/berstanio/gdx-graalhelper/actions/workflows/gradle.yml/badge.svg)](https://github.com/berstanio/gdx-graalhelper/actions/workflows/gradle.yml) [![Publish to Maven Central](https://github.com/berstanio/gdx-graalhelper/actions/workflows/gradle-publish.yml/badge.svg)](https://github.com/berstanio/gdx-graalhelper/actions/workflows/gradle-publish.yml) ![License](https://img.shields.io/github/license/anyicomplex/gdx-svmhelper)
+# gdx-svmhelper [![Publish to Maven Central](https://github.com/berstanio/gdx-graalhelper/actions/workflows/gradle-publish.yml/badge.svg)](https://github.com/berstanio/gdx-graalhelper/actions/workflows/gradle-publish.yml) ![License](https://img.shields.io/github/license/anyicomplex/gdx-svmhelper)
 
 Experimental helper for [libGDX](https://libgdx.com/) to build [GraalVM](https://www.graalvm.org/) Native Image.  
 **Note: Besides best effort, this library can't provide out of the box support for native-image. Some reflection uses are unpredictable. You can mark classes with `CollectForGDXJsonSerialization` to support GDX Json de-serialization**
