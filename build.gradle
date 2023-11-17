@@ -2,7 +2,7 @@ ext {
     isReleaseBuild = {
         return project.hasProperty("RELEASE")
     }
-    graalhelperVersion = "2.0.0" + (isReleaseBuild() ? "" : "-SNAPSHOT")
+    graalhelperVersion = "2.0.1" + (isReleaseBuild() ? "" : "-SNAPSHOT")
     gdxVersion = '1.12.1'
     gdxControllersVersion = '2.2.3'
     graalvmVersion = '22.3.1'
