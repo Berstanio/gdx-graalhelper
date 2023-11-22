@@ -25,25 +25,26 @@ import org.graalvm.nativeimage.impl.RuntimeResourceSupport;
 
 public class ReflectionRegistrationFeature implements Feature {
 
-
     @Override
-    public void beforeAnalysis(BeforeAnalysisAccess access) {
-
+    public void duringSetup(DuringSetupAccess access) {
         boolean isWindows = System.getProperty("os.name").contains("Windows");
         boolean isLinux = System.getProperty("os.name").contains("Linux");
         boolean isMac = System.getProperty("os.name").contains("Mac");
 
-        try {
+        if (isWindows) {
+            ImageSingletons.lookup(RuntimeResourceSupport.class).addResources(ConfigurationCondition.alwaysTrue(), ".+\\.dll");
+        } else if (isLinux) {
+            ImageSingletons.lookup(RuntimeResourceSupport.class).addResources(ConfigurationCondition.alwaysTrue(), ".+\\.so");
+        } else if (isMac) {
+            ImageSingletons.lookup(RuntimeResourceSupport.class).addResources(ConfigurationCondition.alwaysTrue(), ".+\\.dylib");
+        } else {
+            throw new IllegalStateException("Unable to detect OS. Please report this.");
+        }
+    }
 
-            if (isWindows) {
-                ImageSingletons.lookup(RuntimeResourceSupport.class).addResources(ConfigurationCondition.alwaysTrue(), ".+\\.dll");
-            } else if (isLinux) {
-                ImageSingletons.lookup(RuntimeResourceSupport.class).addResources(ConfigurationCondition.alwaysTrue(), ".+\\.so");
-            } else if (isMac) {
-                ImageSingletons.lookup(RuntimeResourceSupport.class).addResources(ConfigurationCondition.alwaysTrue(), ".+\\.dylib");
-            } else {
-                throw new IllegalStateException("Unable to detect OS. Please report this.");
-            }
+    @Override
+    public void beforeAnalysis(BeforeAnalysisAccess access) {
+        try {
 
             // LWJGL3 backend
             // Can be fine-tuned to public Sound (OpenALLwjgl3Audio audio, FileHandle file)
