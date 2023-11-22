@@ -58,6 +58,8 @@ public class FeatureUtils {
             ArrayMap.class, Map.class, Array.class, Queue.class, Collection.class));
     public static final Set<Class<?>> registered = new HashSet<>();
 
+    public static final int MAX_DEPTH = Integer.parseInt(System.getProperty("SVMHELPER_DEPTH", "3"));
+
     public static void registerForGdxJSONSerialization(BeforeAnalysisAccess access, Class<?>... classes) {
         for (Class<?> c : classes) {
             c = preProcess(c);
@@ -93,6 +95,10 @@ public class FeatureUtils {
     }
 
     private static void registerForGdxJSONSerialization(BeforeAnalysisAccessImpl access, int depth, Class<?> clazz) {
+        if (depth >= MAX_DEPTH) {
+            log("Bailout for class: " + clazz.getName() + " because it overstepped depth: " + MAX_DEPTH);
+            return;
+        }
         registered.add(clazz);
         RuntimeReflection.register(clazz);
         registerOnlyNoArgConstructor(clazz);
