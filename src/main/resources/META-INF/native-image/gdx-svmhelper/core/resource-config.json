@@ -5,10 +5,10 @@
       "pattern":"\\Qsfd.ser\\E"
     },
     {
-      "pattern":"\\Qcom/badlogic/gdx/utils/arial-15.fnt\\E"
+      "pattern":"\\Qcom/badlogic/gdx/utils/lsans-15.fnt\\E"
     },
     {
-      "pattern":"\\Qcom/badlogic/gdx/utils/arial-15.png\\E"
+      "pattern":"\\Qcom/badlogic/gdx/utils/lsans-15.png\\E"
     },
     {
       "pattern":"\\Qcom/badlogic/gdx/graphics/g3d/particles/particles.vertex.glsl\\E"
